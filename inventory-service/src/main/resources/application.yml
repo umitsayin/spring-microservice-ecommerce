@@ -1,0 +1,26 @@
+spring:
+    application:
+        name: inventory-service
+    datasource:
+        password: postgres
+        url: jdbc:postgresql://localhost:5432/inventory-db
+        username: postgres
+    jpa:
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                default_schema: public
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+        show-sql: false
+eureka:
+    client:
+        fetch-registry: true
+        register-with-eureka: true
+        service-url:
+            defaultZone: http://localhost:8761/eureka
+    instance:
+        instance-id: ${spring.application.name}:${random.value}}
+        prefer-ip-address: true
+server:
+    port: 0
