@@ -25,7 +25,4 @@ public class Product extends BaseModel{
 
     @ManyToMany
     private Set<Category> categories = new HashSet<>();
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<Document> documents = new ArrayList<>();
 }
