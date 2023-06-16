@@ -27,7 +27,8 @@ public class DocumentController {
     }
 
     @PostMapping
-    public ResponseEntity<DocumentResponse> create(@RequestBody MultipartFile[] files, String productId){
+    public ResponseEntity<DocumentResponse> create(@RequestParam("files") MultipartFile[] files,
+                                                   @RequestParam("productId") String productId){
         return ResponseEntity.ok(documentService.create(files,UUID.fromString(productId)));
     }
 

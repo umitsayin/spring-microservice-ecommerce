@@ -13,6 +13,14 @@ spring:
                 default_schema: public
                 dialect: org.hibernate.dialect.PostgreSQLDialect
         show-sql: false
+    servlet:
+        multipart:
+            max-file-size: 100MB
+            max-request-size: 100MB
+    cloud:
+        openfeign:
+            circuitbreaker:
+                enabled: true
 eureka:
     client:
         fetch-registry: true
@@ -24,3 +32,9 @@ eureka:
         prefer-ip-address: true
 server:
     port: 0
+resilience4j:
+    retry:
+        instances:
+            document-client:
+                max-attempts: 5
+                waitDuration: 10s

@@ -3,6 +3,10 @@ package com.turkcell.inventoryservice.dto.request;
 public class CategoryRequest {
     private String name;
 
+    public CategoryRequest() {
+
+    }
+
     public CategoryRequest(String name) {
         this.name = name;
     }

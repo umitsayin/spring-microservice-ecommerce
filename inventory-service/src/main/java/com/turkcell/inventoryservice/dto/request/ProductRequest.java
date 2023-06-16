@@ -1,31 +1,35 @@
-package com.turkcell.inventoryservice.model;
-
-import jakarta.persistence.*;
+package com.turkcell.inventoryservice.dto.request;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
-@Entity
-public class Product extends BaseModel{
+public class ProductRequest {
+    private List<UUID> categoryId;
     private String name;
     private String description;
     private int quantity;
     private BigDecimal price;
 
-    public Product(){
+    public ProductRequest(){
 
     }
 
-    public Product(String name, String description, int quantity, BigDecimal price) {
+    public ProductRequest( List<UUID> categoryId, String name, String description, int quantity, BigDecimal price) {
+        this.categoryId = categoryId;
         this.name = name;
         this.description = description;
         this.quantity = quantity;
         this.price = price;
     }
 
-    @ManyToMany
-    private Set<Category> categories = new HashSet<>();
+    public  List<UUID> getCategoryId() {
+        return categoryId;
+    }
 
+    public void setCategoryId( List<UUID> categoryId) {
+        this.categoryId = categoryId;
+    }
 
     public String getName() {
         return name;
@@ -57,13 +61,5 @@ public class Product extends BaseModel{
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public Set<Category> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(Set<Category> categories) {
-        this.categories = categories;
     }
 }
