@@ -1,5 +1,6 @@
 package com.turkcell.inventoryservice.service.impl;
 
+import com.turkcell.commonservice.config.exception.EntityNotFoundException;
 import com.turkcell.commonservice.dto.response.DocumentResponse;
 import com.turkcell.commonservice.kafka.ProductDeletedEvent;
 import com.turkcell.commonservice.util.constant.CommonConstant;
@@ -27,7 +28,10 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryService categoryService;
     private final KafkaProducer kafkaProducer;
 
-    public ProductServiceImpl(ProductRepository repository, DocumentClient documentClient, CategoryService categoryService, KafkaProducer kafkaProducer) {
+    public ProductServiceImpl(ProductRepository repository,
+                              DocumentClient documentClient,
+                              CategoryService categoryService,
+                              KafkaProducer kafkaProducer) {
         this.repository = repository;
         this.documentClient = documentClient;
         this.categoryService = categoryService;
@@ -53,7 +57,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse getById(UUID id) {
         Product product = getProductById(id);
-        List<CategoryResponse> categoryResponse = product.getCategories().stream().map(CategoryResponse::convert).toList();
+        List<CategoryResponse> categoryResponse = product.getCategories().stream()
+                .map(CategoryResponse::convert)
+                .toList();
         DocumentResponse documentResponse = documentClient.getDocumentsByProductId(product.getId().toString());
 
         ProductResponse response = ProductResponse.convert(product, categoryResponse, documentResponse.documents());
@@ -94,7 +100,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private Product getProductById(UUID id){
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Product not found!"));
+        return repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(CommonConstant.Exception.PRODUCT_NOT_FOUND));
     }
 
     private List<String> getDocuments(MultipartFile[] files, String productId){

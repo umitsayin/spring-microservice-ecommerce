@@ -1,5 +1,7 @@
 package com.turkcell.inventoryservice.service.impl;
 
+import com.turkcell.commonservice.config.exception.EntityNotFoundException;
+import com.turkcell.commonservice.util.constant.CommonConstant;
 import com.turkcell.inventoryservice.dto.request.CategoryRequest;
 import com.turkcell.inventoryservice.dto.response.CategoryResponse;
 import com.turkcell.inventoryservice.model.Category;
@@ -13,9 +15,11 @@ import java.util.UUID;
 @Service
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository repository;
+    private final CategoryServiceRules rules;
 
-    public CategoryServiceImpl(CategoryRepository repository) {
+    public CategoryServiceImpl(CategoryRepository repository, CategoryServiceRules rules) {
         this.repository = repository;
+        this.rules = rules;
     }
 
     @Override
@@ -35,6 +39,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse create(CategoryRequest request) {
+        rules.checkIfCategoryExists(request.getName());
+
         Category category = new Category();
         category.setName(request.getName());
 
@@ -60,6 +66,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private Category getCategory(UUID id){
-        return  repository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
+        return  repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(CommonConstant.Exception.CATEGORY_NOT_FOUND));
     }
 }
