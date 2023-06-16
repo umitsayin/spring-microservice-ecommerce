@@ -9,3 +9,12 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+  ecommerce-kafka:
+    image: bashj79/kafka-kraft
+    container_name: ecommerce-kafka
+    ports:
+      - "9092:9092"
+    volumes:
+      - kafka_data:/opt/kafka/kafka-logs
+volumes:
+  kafka_data:

@@ -39,6 +39,13 @@ public class DocumentServiceImpl implements DocumentService {
                 .toList());
     }
 
+    @Override
+    public void deleteAllByProductId(String productId) {
+        List<Document> documents = repository.findAllByProductId(UUID.fromString(productId));
+
+        repository.deleteAll(documents);
+    }
+
     private List<String> moveDocumentToFolder(MultipartFile[] files, UUID productId){
         List<String> documents = new ArrayList<>();
 

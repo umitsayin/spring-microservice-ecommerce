@@ -8,4 +8,5 @@ import java.util.UUID;
 public interface DocumentService {
     DocumentResponse create(MultipartFile[] files, UUID productId);
     DocumentResponse getDocumentsByProductId(UUID productId);
+    void deleteAllByProductId(String productId);
 }

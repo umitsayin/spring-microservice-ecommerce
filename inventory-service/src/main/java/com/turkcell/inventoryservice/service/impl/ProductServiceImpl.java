@@ -1,6 +1,9 @@
 package com.turkcell.inventoryservice.service.impl;
 
 import com.turkcell.commonservice.dto.response.DocumentResponse;
+import com.turkcell.commonservice.kafka.ProductDeletedEvent;
+import com.turkcell.commonservice.util.constant.CommonConstant;
+import com.turkcell.commonservice.util.kafka.KafkaProducer;
 import com.turkcell.inventoryservice.api.client.DocumentClient;
 import com.turkcell.inventoryservice.dto.request.ProductRequest;
 import com.turkcell.inventoryservice.dto.response.CategoryResponse;
@@ -22,11 +25,13 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository repository;
     private final DocumentClient documentClient;
     private final CategoryService categoryService;
+    private final KafkaProducer kafkaProducer;
 
-    public ProductServiceImpl(ProductRepository repository, DocumentClient documentClient, CategoryService categoryService) {
+    public ProductServiceImpl(ProductRepository repository, DocumentClient documentClient, CategoryService categoryService, KafkaProducer kafkaProducer) {
         this.repository = repository;
         this.documentClient = documentClient;
         this.categoryService = categoryService;
+        this.kafkaProducer = kafkaProducer;
     }
 
     @Override
@@ -84,7 +89,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteById(UUID id) {
         Product product = getProductById(id);
-
+        kafkaProducer.sendMessage(CommonConstant.Kafka.PRODUCT_DELETED_TOPIC, new ProductDeletedEvent(id.toString()));
         repository.delete(product);
     }
 
