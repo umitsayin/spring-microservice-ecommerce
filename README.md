@@ -12,6 +12,5 @@
 - Spring Cloud
 - Spring Kafka
 - OpenFeign
-- Validation
 - Docker
 - PostgreSQL
